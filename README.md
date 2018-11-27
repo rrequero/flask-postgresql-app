@@ -1,18 +1,20 @@
----
-services: app-service\web,app-service
-platforms: python
-author: cephalin
----
+# Docker and Docker-compose Exercise
 
-# Flask and PostgreSQL sample for Azure App Service
+## Create Dockerfile
 
-This is a sample application that you can use to follow along with the tutorial at 
-[Build a Python and PostgreSQL web app in Azure](https://docs.microsoft.com/azure/app-service/app-service-web-tutorial-python-postgresql). 
+image: tiangolo/uwsgi-nginx-flask:python3.6
+sources:
+    - dependencies file: requirements.txt
+    - code folder: app
+install dependencies: pip install -r ./requirements.txt --no-cache-dir
+environment variables: FLASK_APP=app.py
+execute app: flask db upgrade && flask run -h 0.0.0.0 -p 5000
 
-The sample is a simple Python Flask application that connects to a PostgreSQL database via SQLAlchemy.
+## Create Docker-compose
 
-The database connection information is specified via environment variables `DBHOST`, `DBPASS`, `DBUSER`, and `DBNAME`. This app always uses the default PostgreSQL port.
+The app needs a postgres (version 10) database. The app need the next environment variables to connect to the database:
 
-# Contributing
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+- DBHOST  -> Database host
+- DBPASS  -> Database password
+- DBUSER  -> Database user
+- DBNAME  -> Database name
